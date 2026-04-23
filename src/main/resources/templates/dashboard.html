@@ -6,28 +6,146 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
+<body class="bg-gray-800 min-h-screen"  th:style="'background-image:url('+@{/images/bg7.png} + ');
+              background-size:cover;'">
+    <!-- Navbar -->
+    <nav class="bg-gray-800 p-3">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
 
-<body >
-<nav class="bg-gray-800 p-4">
-    <div class="container mx-auto flex justify-between items-center">
+            <!-- Left -->
+            <div class="flex space-x-12 text-white text-lg ps-2">
+                <a th:href="@{/}" class="hover:text-gray-300 text-[20px]">Home</a>
+                <a th:href="@{/tasks}" class="hover:text-gray-300 text-[20px] ps-4">Task</a>
+            </div>
 
-        <!-- Left side -->
-        <div class="flex space-x-6 text-white text-[20px] ">
-            <a th:href="@{/}" class="hover:text-gray-200">Home</a>
-            <a th:href="@{/todo}" class="hover:text-gray-200">Todo</a>
-        </div>
-
-        <!-- Right side -->
-
+            <!-- Right -->
             <form th:action="@{/logout}" method="post">
-                <button class=" text-white px-6 py-2 rounded hover:underline">
+                <button class="text-white text-[20px]  px-4 py-2 hover:underline">
                     Logout
                 </button>
             </form>
+        </div>
+    </nav>
 
+
+    <!-- Card -->
+    <div class="flex justify-center items-center px-4">
+        <div class="w-screen max-w-md bg-gradient-to-br from-blue-200/20 to-blue-800/20 text-white rounded-2xl p-6 text-center shadow-lg">
+
+            <!-- Search -->
+            <div class="flex items-center gap-3">
+                <input id="cityInput"
+                       type="text"
+                       placeholder="Enter your city"
+                       class="flex-1 px-5 py-2 rounded-full text-gray-700 outline-none text-lg"
+                       spellcheck="false">
+
+                <!-- IMPORTANT: ID added -->
+                <button id="searchBtn"
+                        class="bg-white w-14 h-14 rounded-full flex items-center justify-center">
+                    <img th:src="@{/images/search.png}" class="w-4">
+                </button>
+            </div>
+
+            <!-- Error -->
+            <p class="text-red-700 mt-3 hidden error">Invalid city name!</p>
+
+            <!-- Weather -->
+            <div class="mt-5">
+                <img th:src="@{/images/mist.png}" class="w-40 mx-auto weather-icon">
+
+                <h1 class="text-6xl font-medium temp mt-4">0°C</h1>
+                <h2 class="text-3xl font-normal city">Welcome!!</h2>
+
+                <!-- Details -->
+                <div class="flex justify-between mt-8 px-4">
+
+                    <!-- Humidity -->
+                    <div class="flex items-center gap-3">
+                        <img th:src="@{/images/humidity.png}" class="w-10">
+                        <div class="text-left">
+                            <p class="text-2xl humidity">0%</p>
+                            <p>Humidity</p>
+                        </div>
+                    </div>
+
+                    <!-- Wind -->
+                    <div class="flex items-center gap-3">
+                        <img th:src="@{/images/wind.png}" class="w-10">
+                        <div class="text-left">
+                            <p class="text-2xl wind">0 km/h</p>
+                            <p>Wind Speed</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
     </div>
-</nav>
 
+    <script>
+        const apiKey ="5dc19662e2a92383d56adc48af2fcc3a";
+         const apiUrl ="https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
 
-</body>
-</html>
+          const searchbox = document.getElementById("cityInput");
+          const searchbtn = document.getElementById("searchBtn");
+          const weathericon = document.querySelector(".weather-icon");
+          const error = document.querySelector(".error");
+
+          async function checkWeather(city) {
+
+              if(city === ""){
+                  alert("Please enter city name");
+                  return;
+              }
+
+              const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+
+              if(response.status == 404){
+                  error.classList.remove("hidden");
+              } else {
+                  const data = await response.json();
+
+                  document.querySelector(".city").innerHTML = data.name;
+                  document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
+                  document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+                  document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+
+                  // Weather icon change
+                  const weatherMain = data.weather[0].main;
+
+                  if(weatherMain === "Clouds"){
+                      weathericon.src = "/images/clouds.png";
+                  } else if(weatherMain === "Clear"){
+                      weathericon.src = "/images/clear.png";
+                  } else if(weatherMain === "Rain"){
+                      weathericon.src = "/images/rain.png";
+                  } else if(weatherMain === "Drizzle"){
+                      weathericon.src = "/images/drizzle.png";
+                  } else if(weatherMain === "Mist"){
+                      weathericon.src = "/images/mist.png";
+                  } else if(weatherMain === "Snow"){
+                      weathericon.src = "/images/snow.png";
+                  }
+
+                  error.classList.add("hidden");
+              }
+          }
+
+          // Click button
+          searchbtn.addEventListener("click", () => {
+              checkWeather(searchbox.value);
+          });
+
+          // Press Enter
+          searchbox.addEventListener("keypress", function(e) {
+              if (e.key === "Enter") {
+                  checkWeather(searchbox.value);
+              }
+          });
+    </script>
+
+    </body>
+    </html>
+

@@ -4,6 +4,8 @@ package com.project.DailyLife.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "users")
@@ -17,6 +19,6 @@ public class User {
     private String email;
     private String password;
 
-    public User() {
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Task> tasks;
 }

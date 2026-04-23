@@ -23,6 +23,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth->auth
                          .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/","/login","/register").permitAll()
+                       .requestMatchers("/tasks/**").hasRole("USER")
                         .anyRequest().authenticated()
                         )
                 .formLogin(form -> form

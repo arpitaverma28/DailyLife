@@ -26,9 +26,6 @@ public class HomeController {
     public String showDashboard() {
         return "dashboard";
     }
-    @GetMapping("/todo")
-    public String showTodo() {
-        return "todo";
-    }
+
 
 }

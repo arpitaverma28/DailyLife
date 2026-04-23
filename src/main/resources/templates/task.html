@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>todo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .text-strikethrough{
+            text-decoration: line-through;
+            color: gray;
+        }
+    </style>
+</head>
+
+<body class="bg-cover bg-center min-h-screen"
+      style="background-image:url('/images/bg2.png');">
+
+<!-- NAVBAR -->
+<nav class="bg-gray-800 p-3">
+    <div class="max-w-5xl mx-auto flex justify-between items-center">
+
+        <!-- Left -->
+        <div class="flex space-x-12 text-white text-lg ps-2">
+            <a th:href="@{/}" class="hover:text-gray-300 text-[20px]">Home</a>
+            <a th:href="@{/tasks}" class="hover:text-gray-300 text-[20px] ps-4">Task</a>
+        </div>
+
+        <!-- Right -->
+        <form th:action="@{/logout}" method="post">
+            <button class="text-white text-[20px]  px-4 py-2 hover:underline">
+                Logout
+            </button>
+        </form>
+    </div>
+</nav>
+
+<!-- MAIN CARD -->
+<div class="max-w-2xl mx-auto mt-10 p-6 rounded-xl border border-gray-300 backdrop-blur-lg bg-white/30 shadow-lg">
+
+    <h1 class="text-[35px] font-medium text-center text-black mb-2">
+        Shape Your Day
+    </h1>
+
+    <p class="text-center text-red-800 mb-4">
+        Plan It. Do It. Own It.
+    </p>
+
+    <!-- FORM -->
+    <form th:action="@{/tasks}" method="post" class="flex gap-2">
+        <input type="text" name="title" required
+               placeholder="Add a new task..."
+               class="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"/>
+
+        <button type="submit"
+                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+            Add
+        </button>
+    </form>
+
+    <!-- TASK LIST -->
+    <div class="mt-6 space-y-3">
+        <th:block th:each="task : ${tasks}">
+            <div class="flex justify-between items-center bg-white/80 p-3 rounded-lg shadow">
+
+                <span th:classappend="${task.completed}? 'text-strikethrough'"
+                      th:text="${task.title}">
+                    Task Title
+                </span>
+
+                <div class="flex gap-2">
+                    <a th:href="@{/tasks/{id}/toggle(id=${task.id})}"
+                       class="px-3 py-1 text-sm border border-blue-400 text-blue-500 rounded hover:bg-blue-100">
+                        Toggle
+                    </a>
+
+                    <a th:href="@{/tasks/{id}/delete(id=${task.id})}"
+                       class="px-3 py-1 text-sm border border-red-400 text-red-500 rounded hover:bg-red-100">
+                        Delete
+                    </a>
+                </div>
+
+            </div>
+        </th:block>
+    </div>
+
+</div>
+
+</body>
+</html>
