@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+
+<body >
+<nav class="bg-gray-800 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+
+        <!-- Left side -->
+        <div class="flex space-x-6 text-white text-[20px] ">
+            <a th:href="@{/}" class="hover:text-gray-200">Home</a>
+            <a th:href="@{/todo}" class="hover:text-gray-200">Todo</a>
+        </div>
+
+        <!-- Right side -->
+
+            <form th:action="@{/logout}" method="post">
+                <button class=" text-white px-6 py-2 rounded hover:underline">
+                    Logout
+                </button>
+            </form>
+
+    </div>
+</nav>
+
+
+</body>
+</html>
